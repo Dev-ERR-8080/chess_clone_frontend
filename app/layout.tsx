@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { MatchProvider } from "@/lib/MatchContext";
 
 
 
@@ -18,7 +19,9 @@ export default function RootLayout({
       <body
        suppressHydrationWarning={true} className="bg-background text-foreground antialiased"
       >
-        {children}
+        <MatchProvider >
+          {children}
+        </MatchProvider>
       </body>
     </html>
   );

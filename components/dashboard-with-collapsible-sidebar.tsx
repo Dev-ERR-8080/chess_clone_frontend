@@ -6,7 +6,7 @@ import {
   Bell, Settings, HelpCircle, User, LucideIcon, Medal,
   PlayCircle, Flame, Zap, Clock
 } from "lucide-react";
-import ChessGame from "@/app/play/page";
+import ChessGame from "@/app/match[matchId]/page";
 
 // --- Types ---
 interface OptionProps {
@@ -56,9 +56,11 @@ const Sidebar = () => {
       </div>
 
       {open && (
+        <>
         <div className="border-t border-gray-200 dark:border-white/5 pt-4">
           <Option Icon={Settings} title="Settings" selected={selected} setSelected={setSelected} open={open} />
         </div>
+        </>
       )}
       <ToggleClose open={open} setOpen={setOpen} />
     </nav>

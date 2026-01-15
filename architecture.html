@@ -1,0 +1,127 @@
+strict digraph "dependency-cruiser output"{
+    rankdir="LR" splines="true" overlap="false" nodesep="0.16" ranksep="0.18" fontname="Helvetica-bold" fontsize="9" style="rounded,bold,filled" fillcolor="#ffffff" compound="true"
+    node [shape="box" style="rounded, filled" height="0.2" color="black" fillcolor="#ffffcc" fontcolor="black" fontname="Helvetica" fontsize="9"]
+    edge [arrowhead="normal" arrowsize="0.6" penwidth="2.0" color="#00000033" fontname="Helvetica" fontsize="9"]
+
+    subgraph "cluster_app" {label="app" "app/globals.css" [label=<globals.css> tooltip="globals.css" URL="app/globals.css" ] }
+    subgraph "cluster_app" {label="app" subgraph "cluster_app/home" {label="home" "app/home/page.tsx" [label=<page.tsx> tooltip="page.tsx" URL="app/home/page.tsx" fillcolor="#bbfeff"] } }
+    "app/home/page.tsx" -> "components/dashboard-with-collapsible-sidebar.tsx"
+    "app/home/page.tsx" -> "components/rainbow-borders-button.tsx"
+    "app/home/page.tsx" -> "components/ui/avatar.tsx"
+    "app/home/page.tsx" -> "components/ui/badge.tsx"
+    "app/home/page.tsx" -> "node_modules/lucide-react" [penwidth="1.0"]
+    "app/home/page.tsx" -> "node_modules/next" [penwidth="1.0"]
+    "app/home/page.tsx" -> "node_modules/react" [penwidth="1.0"]
+    subgraph "cluster_app" {label="app" "app/layout.tsx" [label=<layout.tsx> tooltip="layout.tsx" URL="app/layout.tsx" fillcolor="#bbfeff"] }
+    "app/layout.tsx" -> "app/globals.css"
+    "app/layout.tsx" -> "node_modules/next" [penwidth="1.0" arrowhead="onormal"]
+    subgraph "cluster_app" {label="app" subgraph "cluster_app/login" {label="login" "app/login/page.tsx" [label=<page.tsx> tooltip="page.tsx" URL="app/login/page.tsx" fillcolor="#bbfeff"] } }
+    "app/login/page.tsx" -> "components/gaming-login.tsx"
+    "app/login/page.tsx" -> "node_modules/next" [penwidth="1.0"]
+    "app/login/page.tsx" -> "node_modules/react" [penwidth="1.0"]
+    subgraph "cluster_app" {label="app" "app/page.tsx" [label=<page.tsx> tooltip="page.tsx" URL="app/page.tsx" fillcolor="#bbfeff"] }
+    "app/page.tsx" -> "node_modules/next" [penwidth="1.0"]
+    subgraph "cluster_app" {label="app" subgraph "cluster_app/play" {label="play" "app/play/page.tsx" [label=<page.tsx> tooltip="page.tsx" URL="app/play/page.tsx" fillcolor="#bbfeff"] } }
+    "app/play/page.tsx" -> "components/ChessBoard/ChessBoard.tsx"
+    "app/play/page.tsx" -> "node_modules/react" [penwidth="1.0"]
+    subgraph "cluster_app" {label="app" subgraph "cluster_app/test" {label="test" "app/test/page.tsx" [label=<page.tsx> tooltip="page.tsx" URL="app/test/page.tsx" fillcolor="#bbfeff"] } }
+    "app/test/page.tsx" -> "components/dashboard-with-collapsible-sidebar.tsx"
+    "app/test/page.tsx" -> "components/ui/avatar.tsx"
+    "app/test/page.tsx" -> "node_modules/lucide-react" [penwidth="1.0"]
+    "app/test/page.tsx" -> "node_modules/react" [penwidth="1.0"]
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" "components/ChessBoard/BoardGrid.tsx" [label=<BoardGrid.tsx> tooltip="BoardGrid.tsx" URL="components/ChessBoard/BoardGrid.tsx" fillcolor="#bbfeff"] } }
+    "components/ChessBoard/BoardGrid.tsx" -> "components/ChessBoard/Square.tsx"
+    "components/ChessBoard/BoardGrid.tsx" -> "node_modules/framer-motion" [penwidth="1.0"]
+    "components/ChessBoard/BoardGrid.tsx" -> "node_modules/react" [penwidth="1.0"]
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" "components/ChessBoard/ChessBoard.tsx" [label=<ChessBoard.tsx> tooltip="ChessBoard.tsx" URL="components/ChessBoard/ChessBoard.tsx" fillcolor="#bbfeff"] } }
+    "components/ChessBoard/ChessBoard.tsx" -> "components/ui/history.tsx"
+    "components/ChessBoard/ChessBoard.tsx" -> "components/ChessBoard/BoardGrid.tsx"
+    "components/ChessBoard/ChessBoard.tsx" -> "components/ChessBoard/engine/engineFactory.ts"
+    "components/ChessBoard/ChessBoard.tsx" -> "components/ChessBoard/logic/checkDetection.ts"
+    "components/ChessBoard/ChessBoard.tsx" -> "components/ChessBoard/logic/promotion.tsx"
+    "components/ChessBoard/ChessBoard.tsx" -> "components/ChessBoard/moveGenerator.ts"
+    "components/ChessBoard/ChessBoard.tsx" -> "components/ChessBoard/types.ts"
+    "components/ChessBoard/ChessBoard.tsx" -> "components/ChessBoard/Theme.ts"
+    "components/ChessBoard/ChessBoard.tsx" -> "node_modules/react" [penwidth="1.0"]
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" "components/ChessBoard/Piece.tsx" [label=<Piece.tsx> tooltip="Piece.tsx" URL="components/ChessBoard/Piece.tsx" fillcolor="#bbfeff"] } }
+    "components/ChessBoard/Piece.tsx" -> "node_modules/framer-motion" [penwidth="1.0"]
+    "components/ChessBoard/Piece.tsx" -> "node_modules/react" [penwidth="1.0"]
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" "components/ChessBoard/Square.tsx" [label=<Square.tsx> tooltip="Square.tsx" URL="components/ChessBoard/Square.tsx" fillcolor="#bbfeff"] } }
+    "components/ChessBoard/Square.tsx" -> "components/ChessBoard/Piece.tsx"
+    "components/ChessBoard/Square.tsx" -> "components/ChessBoard/types.ts"
+    "components/ChessBoard/Square.tsx" -> "node_modules/framer-motion" [penwidth="1.0"]
+    "components/ChessBoard/Square.tsx" -> "node_modules/react" [penwidth="1.0"]
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" "components/ChessBoard/Theme.ts" [label=<Theme.ts> tooltip="Theme.ts" URL="components/ChessBoard/Theme.ts" fillcolor="#ddfeff"] } }
+    "components/ChessBoard/Theme.ts" -> "components/ChessBoard/types.ts"
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" subgraph "cluster_components/ChessBoard/engine" {label="engine" "components/ChessBoard/engine/ChessEngine.ts" [label=<ChessEngine.ts> tooltip="ChessEngine.ts" URL="components/ChessBoard/engine/ChessEngine.ts" fillcolor="#ddfeff"] } } }
+    "components/ChessBoard/engine/ChessEngine.ts" -> "components/ChessBoard/engine/types.ts"
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" subgraph "cluster_components/ChessBoard/engine" {label="engine" "components/ChessBoard/engine/ChessJsEngine.ts" [label=<ChessJsEngine.ts> tooltip="ChessJsEngine.ts" URL="components/ChessBoard/engine/ChessJsEngine.ts" fillcolor="#ddfeff"] } } }
+    "components/ChessBoard/engine/ChessJsEngine.ts" -> "components/ChessBoard/engine/ChessEngine.ts"
+    "components/ChessBoard/engine/ChessJsEngine.ts" -> "components/ChessBoard/engine/types.ts"
+    "components/ChessBoard/engine/ChessJsEngine.ts" -> "node_modules/chess.js" [penwidth="1.0"]
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" subgraph "cluster_components/ChessBoard/engine" {label="engine" "components/ChessBoard/engine/CustomEngine.ts" [label=<CustomEngine.ts> tooltip="CustomEngine.ts" URL="components/ChessBoard/engine/CustomEngine.ts" fillcolor="#ddfeff"] } } }
+    "components/ChessBoard/engine/CustomEngine.ts" -> "components/ChessBoard/logic/checkDetection.ts"
+    "components/ChessBoard/engine/CustomEngine.ts" -> "components/ChessBoard/logic/moveGenerator.ts"
+    "components/ChessBoard/engine/CustomEngine.ts" -> "components/ChessBoard/logic/simulateMove.ts"
+    "components/ChessBoard/engine/CustomEngine.ts" -> "components/ChessBoard/engine/ChessEngine.ts"
+    "components/ChessBoard/engine/CustomEngine.ts" -> "components/ChessBoard/engine/types.ts"
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" subgraph "cluster_components/ChessBoard/engine" {label="engine" "components/ChessBoard/engine/engineFactory.ts" [label=<engineFactory.ts> tooltip="engineFactory.ts" URL="components/ChessBoard/engine/engineFactory.ts" fillcolor="#ddfeff"] } } }
+    "components/ChessBoard/engine/engineFactory.ts" -> "components/ChessBoard/engine/ChessEngine.ts"
+    "components/ChessBoard/engine/engineFactory.ts" -> "components/ChessBoard/engine/ChessJsEngine.ts"
+    "components/ChessBoard/engine/engineFactory.ts" -> "components/ChessBoard/engine/CustomEngine.ts"
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" subgraph "cluster_components/ChessBoard/engine" {label="engine" "components/ChessBoard/engine/types.ts" [label=<types.ts> tooltip="types.ts" URL="components/ChessBoard/engine/types.ts" fillcolor="#ddfeff"] } } }
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" subgraph "cluster_components/ChessBoard/logic" {label="logic" "components/ChessBoard/logic/board.ts" [label=<board.ts> tooltip="board.ts" URL="components/ChessBoard/logic/board.ts" fillcolor="#ddfeff"] } } }
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" subgraph "cluster_components/ChessBoard/logic" {label="logic" "components/ChessBoard/logic/checkDetection.ts" [label=<checkDetection.ts> tooltip="checkDetection.ts" URL="components/ChessBoard/logic/checkDetection.ts" fillcolor="#ddfeff"] } } }
+    "components/ChessBoard/logic/checkDetection.ts" -> "components/ChessBoard/logic/kingUtil.ts"
+    "components/ChessBoard/logic/checkDetection.ts" -> "components/ChessBoard/logic/moveGenerator.ts"
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" subgraph "cluster_components/ChessBoard/logic" {label="logic" "components/ChessBoard/logic/kingUtil.ts" [label=<kingUtil.ts> tooltip="kingUtil.ts" URL="components/ChessBoard/logic/kingUtil.ts" fillcolor="#ddfeff"] } } }
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" subgraph "cluster_components/ChessBoard/logic" {label="logic" "components/ChessBoard/logic/moveGenerator.ts" [label=<moveGenerator.ts> tooltip="moveGenerator.ts" URL="components/ChessBoard/logic/moveGenerator.ts" fillcolor="#ddfeff"] } } }
+    "components/ChessBoard/logic/moveGenerator.ts" -> "components/ChessBoard/engine/types.ts"
+    "components/ChessBoard/logic/moveGenerator.ts" -> "components/ChessBoard/logic/board.ts"
+    "components/ChessBoard/logic/moveGenerator.ts" -> "components/ChessBoard/logic/pieceRules.ts"
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" subgraph "cluster_components/ChessBoard/logic" {label="logic" "components/ChessBoard/logic/pieceRules.ts" [label=<pieceRules.ts> tooltip="pieceRules.ts" URL="components/ChessBoard/logic/pieceRules.ts" fillcolor="#ddfeff"] } } }
+    "components/ChessBoard/logic/pieceRules.ts" -> "components/ChessBoard/engine/types.ts"
+    "components/ChessBoard/logic/pieceRules.ts" -> "components/ChessBoard/logic/board.ts"
+    "components/ChessBoard/logic/pieceRules.ts" -> "components/ChessBoard/logic/slideMoves.ts"
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" subgraph "cluster_components/ChessBoard/logic" {label="logic" "components/ChessBoard/logic/promotion.tsx" [label=<promotion.tsx> tooltip="promotion.tsx" URL="components/ChessBoard/logic/promotion.tsx" fillcolor="#bbfeff"] } } }
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" subgraph "cluster_components/ChessBoard/logic" {label="logic" "components/ChessBoard/logic/simulateMove.ts" [label=<simulateMove.ts> tooltip="simulateMove.ts" URL="components/ChessBoard/logic/simulateMove.ts" fillcolor="#ddfeff"] } } }
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" subgraph "cluster_components/ChessBoard/logic" {label="logic" "components/ChessBoard/logic/slideMoves.ts" [label=<slideMoves.ts> tooltip="slideMoves.ts" URL="components/ChessBoard/logic/slideMoves.ts" fillcolor="#ddfeff"] } } }
+    "components/ChessBoard/logic/slideMoves.ts" -> "components/ChessBoard/engine/types.ts"
+    "components/ChessBoard/logic/slideMoves.ts" -> "components/ChessBoard/logic/board.ts"
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" "components/ChessBoard/moveGenerator.ts" [label=<moveGenerator.ts> tooltip="moveGenerator.ts" URL="components/ChessBoard/moveGenerator.ts" fillcolor="#ddfeff"] } }
+    "components/ChessBoard/moveGenerator.ts" -> "components/ChessBoard/types.ts"
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ChessBoard" {label="ChessBoard" "components/ChessBoard/types.ts" [label=<types.ts> tooltip="types.ts" URL="components/ChessBoard/types.ts" fillcolor="#ddfeff"] } }
+    subgraph "cluster_components" {label="components" "components/dashboard-with-collapsible-sidebar.tsx" [label=<dashboard-with-collapsible-sidebar.tsx> tooltip="dashboard-with-collapsible-sidebar.tsx" URL="components/dashboard-with-collapsible-sidebar.tsx" fillcolor="#bbfeff"] }
+    "components/dashboard-with-collapsible-sidebar.tsx" -> "app/play/page.tsx"
+    "components/dashboard-with-collapsible-sidebar.tsx" -> "node_modules/lucide-react" [penwidth="1.0"]
+    "components/dashboard-with-collapsible-sidebar.tsx" -> "node_modules/react" [penwidth="1.0"]
+    subgraph "cluster_components" {label="components" "components/gaming-login.tsx" [label=<gaming-login.tsx> tooltip="gaming-login.tsx" URL="components/gaming-login.tsx" fillcolor="#bbfeff"] }
+    "components/gaming-login.tsx" -> "node_modules/lucide-react" [penwidth="1.0"]
+    "components/gaming-login.tsx" -> "node_modules/react" [penwidth="1.0"]
+    "components/gaming-login.tsx" -> "stream/consumers" [style="dashed" penwidth="1.0"]
+    subgraph "cluster_components" {label="components" "components/rainbow-borders-button.tsx" [label=<rainbow-borders-button.tsx> tooltip="rainbow-borders-button.tsx" URL="components/rainbow-borders-button.tsx" fillcolor="#bbfeff"] }
+    "components/rainbow-borders-button.tsx" -> "node_modules/react" [penwidth="1.0"]
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ui" {label="ui" "components/ui/avatar.tsx" [label=<avatar.tsx> tooltip="avatar.tsx" URL="components/ui/avatar.tsx" fillcolor="#bbfeff"] } }
+    "components/ui/avatar.tsx" -> "lib/utils.ts"
+    "components/ui/avatar.tsx" -> "node_modules/@radix-ui/react-avatar" [penwidth="1.0"]
+    "components/ui/avatar.tsx" -> "node_modules/react" [penwidth="1.0"]
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ui" {label="ui" "components/ui/badge.tsx" [label=<badge.tsx> tooltip="badge.tsx" URL="components/ui/badge.tsx" fillcolor="#bbfeff"] } }
+    "components/ui/badge.tsx" -> "lib/utils.ts"
+    "components/ui/badge.tsx" -> "node_modules/class-variance-authority" [penwidth="1.0"]
+    "components/ui/badge.tsx" -> "node_modules/react" [penwidth="1.0"]
+    subgraph "cluster_components" {label="components" subgraph "cluster_components/ui" {label="ui" "components/ui/history.tsx" [label=<history.tsx> tooltip="history.tsx" URL="components/ui/history.tsx" fillcolor="#bbfeff"] } }
+    "components/ui/history.tsx" -> "node_modules/react" [penwidth="1.0"]
+    subgraph "cluster_lib" {label="lib" "lib/utils.ts" [label=<utils.ts> tooltip="utils.ts" URL="lib/utils.ts" fillcolor="#ddfeff"] }
+    "lib/utils.ts" -> "node_modules/clsx" [penwidth="1.0"]
+    "lib/utils.ts" -> "node_modules/tailwind-merge" [penwidth="1.0"]
+    subgraph "cluster_node_modules" {label="node_modules" subgraph "cluster_node_modules/@radix-ui" {label="@radix-ui" "node_modules/@radix-ui/react-avatar" [label=<react-avatar> tooltip="react-avatar" URL="https://www.npmjs.com/package/@radix-ui/react-avatar" shape="box3d" fillcolor="#c40b0a1a" fontcolor="#c40b0a"] } }
+    subgraph "cluster_node_modules" {label="node_modules" "node_modules/chess.js" [label=<chess.js> tooltip="chess.js" URL="https://www.npmjs.com/package/chess.js" shape="box3d" fillcolor="#c40b0a1a" fontcolor="#c40b0a"] }
+    subgraph "cluster_node_modules" {label="node_modules" "node_modules/class-variance-authority" [label=<class-variance-authority> tooltip="class-variance-authority" URL="https://www.npmjs.com/package/class-variance-authority" shape="box3d" fillcolor="#c40b0a1a" fontcolor="#c40b0a"] }
+    subgraph "cluster_node_modules" {label="node_modules" "node_modules/clsx" [label=<clsx> tooltip="clsx" URL="https://www.npmjs.com/package/clsx" shape="box3d" fillcolor="#c40b0a1a" fontcolor="#c40b0a"] }
+    subgraph "cluster_node_modules" {label="node_modules" "node_modules/framer-motion" [label=<framer-motion> tooltip="framer-motion" URL="https://www.npmjs.com/package/framer-motion" shape="box3d" fillcolor="#c40b0a1a" fontcolor="#c40b0a"] }
+    subgraph "cluster_node_modules" {label="node_modules" "node_modules/lucide-react" [label=<lucide-react> tooltip="lucide-react" URL="https://www.npmjs.com/package/lucide-react" shape="box3d" fillcolor="#c40b0a1a" fontcolor="#c40b0a"] }
+    subgraph "cluster_node_modules" {label="node_modules" "node_modules/next" [label=<next> tooltip="next" URL="https://www.npmjs.com/package/next" shape="box3d" fillcolor="#c40b0a1a" fontcolor="#c40b0a"] }
+    subgraph "cluster_node_modules" {label="node_modules" "node_modules/react" [label=<react> tooltip="react" URL="https://www.npmjs.com/package/react" shape="box3d" fillcolor="#c40b0a1a" fontcolor="#c40b0a"] }
+    subgraph "cluster_node_modules" {label="node_modules" "node_modules/tailwind-merge" [label=<tailwind-merge> tooltip="tailwind-merge" URL="https://www.npmjs.com/package/tailwind-merge" shape="box3d" fillcolor="#c40b0a1a" fontcolor="#c40b0a"] }
+    subgraph "cluster_stream" {label="stream" "stream/consumers" [label=<consumers> tooltip="consumers" URL="https://nodejs.org/api/stream.html" color="grey" fontcolor="grey"] }
+}

@@ -28,10 +28,16 @@ export default function Square({
   const isMoveTarget = lastMove && lastMove.to.row === row && lastMove.to.col === col;
   
   const FILES = ["a", "b", "c", "d", "e", "f", "g", "h"];
-  const rankLabel = orientation === "white" ? 8 - row : row + 1;
-  const fileLabel = orientation === "white" ? FILES[col] : FILES[7 - col];
-  const showRank = orientation === "white" ? col === 0 : col === 7;
-  const showFile = orientation === "white" ? row === 7 : row === 0;
+  
+  const visualRow = orientation === "white" ? row : 7 - row;
+  const visualCol = orientation === "white" ? col : 7 - col;
+
+  const rankLabel = 8 - visualRow;
+  const fileLabel = FILES[visualCol];
+
+  const showRank = visualCol === 0;
+  const showFile = visualRow === 7;
+
   
 
   let animation;

@@ -233,6 +233,7 @@ export class CustomEngine implements ChessEngine {
 
     return true;
   }
+  
   promotePawn(at: Square, piece: string): void {
     const current = this.board[at.row][at.col];
 

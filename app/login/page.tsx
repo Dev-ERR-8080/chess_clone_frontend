@@ -21,29 +21,39 @@ export default function Login() {
 
   // ✅ Single submit handler
   const handleLogin = async (
-    email: string,
+    email:string,
     password: string,
     remember: boolean,
     isRegister: boolean,
     username: string,
     fullName: string,
     country: string,
-    confirmPassword?: string
+    confirmPassword: string
   ) => {
     setIsLoading(true);
     setErrorMessage(null);
 
     try {
-      console.log("Submitting form with:", { email, password, remember, isRegister, username, confirmPassword });
-      if(isRegister && (username === undefined || confirmPassword === undefined)) throw new Error("Username and Confirm Password are required for registration");
+      console.log("Submitting form with:", { email, password, remember, isRegister, username, confirmPassword , fullName,country});
+      if(isRegister && (!username || !confirmPassword )) throw new Error("Username and Confirm Password are required for registration");
 
       if(isRegister && password !== confirmPassword) throw new Error("Passwords do not match");
 
       const endpoint = isRegister ? "/auth/register" : "/auth/login";
 
       const body = isRegister
-        ? { userEmailId: email, password: password, username: username }
-        : { userEmailId: email, password: password };
+        ? {
+            userEmailId: email,
+            password: password,
+            username: username,
+            userFullName: fullName,
+            country: country
+          }
+        : {
+            userEmailId:  email,
+            password: password
+          };
+
 
       const response = await fetch(`${baseurl}${endpoint}`, {
           method: "POST",
@@ -60,7 +70,6 @@ export default function Login() {
           throw new Error(error.message || `Failed to fetch user data (${response.status})`);
         }
 
-        // ✅ LOGIN SUCCESS
         router.push("/home");
     } catch (err: any) {
       setErrorMessage(err.message || "An unexpected error occurred");

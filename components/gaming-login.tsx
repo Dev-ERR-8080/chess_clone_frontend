@@ -1,14 +1,21 @@
 'use client';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Eye, EyeOff, Mail, Lock, Chrome, Twitter, Gamepad2, ChromeIcon, Radio } from 'lucide-react';
 import { text } from 'stream/consumers';
+import countryList from 'react-select-country-list';
+import Select, { SingleValue } from 'react-select';
+import { count } from 'console';
 
 interface LoginFormProps {
-    onSubmit: (email: string, password: string, remember: boolean, isRegister: boolean, username: string,  fullName:string, country:string, confirmPassword?: string) => void;
+    onSubmit: (email: string, password: string, remember: boolean, isRegister: boolean, username: string,  fullName:string, country:string, confirmPassword:string) => void;
 }
 
 interface VideoBackgroundProps {
     videoUrl: string;
+}
+interface CountryOptions{
+    label:String;
+    value:String
 }
 
 interface FormInputProps {
@@ -117,14 +124,19 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
     const [password, setPassword] = useState('');
     const [isRegister, setIsRegister] = useState(false);
     const [username, setUsername] = useState('');
-    const [country, setCountry] = useState('');
+    const [country, setCountry] = useState<CountryOptions|null>(null);
     const [confirmPassword, setConfirmPassword] = useState('');
     const [fullName, setFullName] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [remember, setRemember] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const options = useMemo(() => countryList().getData() as CountryOptions[], []);
 
+    // Fix 3: Proper type for react-select onChange
+    const changeHandler = (selected: SingleValue<CountryOptions>) => {
+        setCountry(selected);
+    };
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
@@ -133,7 +145,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
         setIsSuccess(true);
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        onSubmit(email, password, remember, isRegister, username, confirmPassword,fullName, country);
+        onSubmit(
+            email,
+            password,
+            remember,
+            isRegister,
+            username,
+            fullName,
+            country ? country.label as string : '',
+            confirmPassword
+        );
+
         setIsSubmitting(false);
         setIsSuccess(false);
     };
@@ -219,7 +241,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
                         
                         <FormInput
                             icon={<Lock className="text-white/60" size={18} />}
-                            type={password}
+                            type="password"
                             placeholder="Confirm Password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -234,14 +256,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
                             required
                             />
 
-                        {/* <FormInput
-                            icon={<Lock className="text-white/60" size={18} />}
-                            type="radio"
-                            placeholder="select Country"
+                        
+                        <Select
+                            options={options}
                             value={country}
-                            onChange={(e) => setCountry(e.target.value)}
-                            required
-                            /> */}
+                            onChange={changeHandler}
+                            placeholder="Select a country"
+                        />
+                        
 
 
                     </div>
