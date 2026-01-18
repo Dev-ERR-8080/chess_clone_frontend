@@ -2,6 +2,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
 import { Client, IMessage } from '@stomp/stompjs';
+import PlayerProfile from '@/components/ui/profile';
+import { Button } from '@/components/ui/button';
 
 const WebSocketTest: React.FC = () => {
     const [status, setStatus] = useState<string>("Disconnected");
@@ -74,6 +76,16 @@ const WebSocketTest: React.FC = () => {
 
     return (
         <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
+            <PlayerProfile
+                name='preetham'
+                rating={502}
+                isTurn={true}
+                timeLeft='6000'
+                avatarUrl='https://lh3.googleusercontent.com/a/ACg8ocKZ_jmGKVsgccu9XsufFH1gMX1ZwrElm4uufUNQqXofUgJV-8nJ=s360-c-no'
+                isBottom={true}
+            />
+            <Button />
+
             <h2>WebSocket Test (STOMP)</h2>
             <p>Status: <strong>{status}</strong></p>
             

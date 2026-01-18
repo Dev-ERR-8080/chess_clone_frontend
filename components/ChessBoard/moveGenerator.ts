@@ -25,7 +25,10 @@ export function getPseudoLegalMoves(
     // captures
     for (const dc of [-1, 1]) {
       const target = board[nextRow]?.[col + dc];
-      if (target && target[0] !== piece[0]) {
+      const pieceColor = piece[0] === "w" ? "WHITE" : "BLACK";
+      const targetColor = target ? (target[0] === "w" ? "WHITE" : "BLACK") : null;
+
+      if (target && targetColor !== pieceColor) {
         moves.push({
           row: nextRow,
           col: col + dc,
@@ -45,9 +48,13 @@ export function getPseudoLegalMoves(
     for (const [dr, dc] of jumps) {
       const r = row + dr;
       const c = col + dc;
-      if (!board[r]?.[c]) {
+      const pieceColor = piece[0] === "w" ? "WHITE" : "BLACK";
+      const targetPiece = board[r]?.[c];
+      const targetColor = targetPiece ? (targetPiece[0] === "w" ? "WHITE" : "BLACK") : null;
+      if (!targetPiece) {
         moves.push({ row: r, col: c });
-      } else if (board[r][c][0] !== piece[0]) {
+      } 
+      else if (targetColor !== pieceColor) {
         moves.push({ row: r, col: c, capture: true });
       }
     }

@@ -24,6 +24,7 @@
     "@tabler/icons": "^3.19.0",
     "@tabler/icons-react": "^3.19.0",
     "@ts-morph/common": "^0.25.0",
+    "canvas-confetti": "^1.9.4",
     "chess.js": "^1.4.0",
     "class-variance-authority": "^0.7.1",
     "classnames": "^2.5.1",

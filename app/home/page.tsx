@@ -1,104 +1,8 @@
-// "use client";
-
-// import React, { useEffect, useState } from "react";
-// import { useRouter } from "next/navigation";
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-// import { Badge } from "@/components/ui/badge";
-// import { Button } from "@/components/rainbow-borders-button";
-// import { Hand } from "lucide-react";
-// import ChessUserHome from "@/components/dashboard-with-collapsible-sidebar";
-
-// // Define the User interface to match your Spring Boot 'User' Entity
-// interface User {
-//   userId: number;
-//   username: string;
-//   email: string;
-//   role: string;
-//   pfpUrl: string;
-//   name: string;
-//   country: string | null;
-// }
-
-// export default function Home() {
-//   const router = useRouter();
-//   const [user, setUser] = useState<User | null>(null);
-//   const [isLoading, setIsLoading] = useState(true);
-//   const [error, setError] = useState<string | null>(null);
-
-
-
-//   useEffect(() => {
-//     const fetchUserByEmail = async () => {
-      
-//       try {
-//         // 2. PathVariable implementation: emailId is passed in the URL
-//         const response = await fetch("http://localhost:8080/user/me", {
-//             method: "GET",
-//             credentials: "include",
-//             headers: {
-//                 "Accept": "application/json",
-//             }
-//         });
-
-
-//         if (!response.ok) {
-//           const error = await response.json();
-//           throw new Error(error.message || `Failed to fetch user data (${response.status})`);
-//         }
-
-//         const data = await response.json();
-
-//         if (data) {
-//           setUser(data);
-//           console.log(data);
-//         } else {
-//           setError("User profile is empty.");
-//         }
-//       } catch (err: any) {
-//         setError(err.message || "Failed to fetch user data");
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     };
-
-//     fetchUserByEmail();
-//   }, []);
-
-//   const handlelogout = async () => {
-//     try {
-//       const response = await fetch("http://localhost:8080/auth/logout", { 
-//         method: "POST",
-//         credentials: "include",
-//         headers: {
-//           "Accept": "application/json",
-//         }
-//       });
-
-//       if (!response.ok) {
-//           const error = await response.json();
-//           throw new Error(error.message || `Failed to fetch user data (${response.status})`);
-//         }
-
-//       router.push("/login");
-//     } catch (err: any) {
-//       setError(err.message || "Failed to logout");
-//     }
-//   };
-
-//   if (isLoading) return <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center text-purple-500">Loading...</div>;
-
-//   return (
-//     <div className="flex flex-col items-center justify-center min-h-screen bg-[#0a0a0a] text-white p-6">
-//         <ChessUserHome />
-//     </div>
-//   );
-// }
-
 
 'use client';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button-lovable";
 import {
   Crown,
   Zap,
@@ -114,12 +18,16 @@ import {
   BookOpen,
   Bot,
   Flame,
-  Crosshair
+  Crosshair,
+  ChevronDown
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import { useMatch } from "@/lib/MatchContext";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ok } from "assert";
+import { cookies } from "next/headers";
 
 
 interface User {
@@ -143,6 +51,7 @@ const Index = () => {
   const [selectedMode, setSelectedMode] = useState<MatchMode>("CLASSIC");
   const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string>("");
+  const [isLoggedIn,setIsLoggedIn] = useState<boolean>(false);
 
   const {setMatch} = useMatch();
   const router = useRouter();
@@ -169,10 +78,14 @@ const Index = () => {
           credentials: "include",
         });
 
-        if (!response.ok) throw new Error("Unauthorized");
+        if (!response.ok) {
+          setIsLoggedIn(false)
+          throw new Error("Unauthorized");
+        }
 
         const userData = await response.json();
         setUser(userData);
+        setIsLoggedIn(true)
 
         const socket = new SockJS("http://localhost:8080/ws");
         const client = new Client({
@@ -201,7 +114,6 @@ const Index = () => {
     init();
   }, []);
 
-
   const checkLogin = async () => {
     try {
       const res = await fetch("http://localhost:8080/user/me", {
@@ -211,10 +123,13 @@ const Index = () => {
       });
       const data = await res.json();
       console.log("User Data:", data);
+      return data;
     } catch (err) {
       console.error("Failed to check login", err);
     }
   };
+
+
 
   const startGame = async () => {
     setIsSearching(true);
@@ -254,11 +169,25 @@ const Index = () => {
   ];
 
   const timeModes = [
+    { label: "classic", mode:"CLASSIC" ,time: "∞", icon: Crown, color: "text-yellow" },
     { label: "Bullet", mode: "BULLET" , time: "1 min", icon: Zap, color: "text-chess-fire" },
     { label: "Blitz", mode:"BLITZ" ,time: "3 min", icon: Flame, color: "text-chess-ember" },
     { label: "Rapid", mode:"RAPID" ,time: "10 min", icon: Target, color: "text-chess-gold" },
-    { label: "classic", mode:"CLASSIC" ,time: "∞", icon: Crown, color: "text-yellow" },
   ];
+
+  
+
+  const handleLogout = async (): Promise<any> => {
+    const res = await fetch("http://localhost:8080/auth/logout", { 
+      method: "POST",
+      credentials:"include",
+      headers: { "Content-Type": "application/json" },
+    });
+    if(res.status === 200){
+        setIsLoggedIn(false);
+    }
+    
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -275,28 +204,56 @@ const Index = () => {
           
           <nav className="hidden md:flex items-center gap-8">
             <a href="#" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
-              <Crosshair className="w-4 h-4" /> Play
+              <Crosshair className="w-4 h-4 text-primary" /> Play
             </a>
             <a href="#" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">Puzzles</a>
             <a href="#" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">Learn</a>
             <a href="#" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">Watch</a>
           </nav>
 
-          <div className="flex items-center gap-4">
+          { !isLoggedIn &&  <a className="font-bold text-sm" href="/login">Login</a>}            
+          { isLoggedIn &&<div className="flex items-center gap-4">
             <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary border-glow">
               <Trophy className="w-4 h-4 text-chess-gold" />
               <span className="font-bold text-sm">1847</span>
             </div>
-              <a className="font-bold text-sm" href="/login">Login</a>
-              <button onClick={checkLogin}>Check Me</button>
-              <div className="flex flex-col items-center mt-4" id="avatar">
-                <Avatar className="mt-6 w-24 h-24 shadow-border">
-                  <AvatarImage src={user?.pfpUrl || user?.profilePicture || undefined} alt={user?.name || user?.username || "User"} />
-                  <AvatarFallback>{user?.username?.charAt(0).toUpperCase()}</AvatarFallback>
-                </Avatar>
-              </div>
-            <div className="w-10 h-10 rounded-lg gamer-gradient shadow-neon" />
-          </div>
+              <DropdownMenu>
+                {/* 1. The button that opens the menu */}
+                <DropdownMenuTrigger className="flex gap-2">
+                  <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
+                      <img
+                        className="rounded-full"
+                        src={user?.pfpUrl}
+                        alt="Profile image"
+                        width={40}
+                        height={40}
+                        aria-hidden="true"
+                      />
+                  </Button>
+                  <ChevronDown size={16} strokeWidth={2} className="ms-2 opacity-60" aria-hidden="true" />
+                </DropdownMenuTrigger>
+
+                {/* 2. The floating container */}
+                <DropdownMenuContent className="bg-black">
+                  {/* 3. Non-clickable heading */}
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  
+                  {/* 4. Horizontal line */}
+                  <DropdownMenuSeparator />
+
+                  {/* 5. Clickable items */}
+                  <DropdownMenuItem >Profile</DropdownMenuItem>
+                  <DropdownMenuItem>Billing</DropdownMenuItem>
+                  <DropdownMenuItem>Clan</DropdownMenuItem>
+                  
+                  <DropdownMenuSeparator />
+                  
+                  <DropdownMenuItem className="text-destructive text-red-500" onClick ={handleLogout} >
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>         
+          </div>}
         </div>
       </header>
 
@@ -321,7 +278,7 @@ const Index = () => {
               </div>
 
               {/* Time Controls */}
-              <div className="grid grid-cols-3 gap-3 mb-6">
+              <div className="grid grid-cols-4 gap-2 mb-6">
                 {timeModes.map((mode) => (
                   <button
                     key={mode.mode}
@@ -331,7 +288,7 @@ const Index = () => {
                     }}
                     className={`group flex flex-col items-center gap-2 p-4 rounded-lg transition-all duration-300 ${
                       selectedMode === mode.mode 
-                        ? 'bg-[#56015f]/20 border-glow shadow-neon' 
+                        ? 'bg-primary/20 border-glow shadow-neon' 
                         : 'bg-secondary hover:bg-secondary/80 border border-transparent hover:border-primary/30'
                     }`}
                   >
@@ -357,8 +314,8 @@ const Index = () => {
                   </div>
                 ) : (
                   <>
-                    <Gamepad2 className="w-5 h-5 text-[#F9551D]" />
-                    <span className="text-[#F9551D]">PLAY NOW</span>
+                    <Gamepad2 className="w-5 h-5 " />
+                    <span className="text-pretty">PLAY NOW</span>
                   </>
                 )}
               </Button>

@@ -2,7 +2,6 @@
 import React from "react";
 import Piece from "./Piece";
 import {motion } from "framer-motion"
-import { LegalMove } from "./types";
 
 
 export default function Square({
@@ -22,29 +21,31 @@ export default function Square({
   checkmate
 }: any) {
   const isDark = (row + col) % 2 === 1;
+
   const isLastMove = lastMove && ((lastMove.from.row === row && lastMove.from.col === col) || (lastMove.to.row === row && lastMove.to.col === col));
   const isSelectedSquare = isSelected && isSelected.row === row && isSelected.col === col;
   const isHoveredSquare = isHovered && isHovered.row === row && isHovered.col === col; 
   const isMoveTarget = lastMove && lastMove.to.row === row && lastMove.to.col === col;
-  
+
   const FILES = ["a", "b", "c", "d", "e", "f", "g", "h"];
-  
-  const visualRow = orientation === "white" ? row : 7 - row;
-  const visualCol = orientation === "white" ? col : 7 - col;
 
-  const rankLabel = 8 - visualRow;
-  const fileLabel = FILES[visualCol];
+  const rankLabel = 8 - row;
+  const fileLabel = FILES[col];
+       
+  const showRank = col === 0;
+  const showFile = row === 7;
 
-  const showRank = visualCol === 0;
-  const showFile = visualRow === 7;
-
-  
+  const isVisuallyFirstCol = orientation === "WHITE" ? col === 0 : col === 7;
+  const isVisuallyLastRow = orientation === "WHITE" ? row === 7 : row === 0;
 
   let animation;
 
   if (isMoveTarget && lastMove) {
-    const dx = (lastMove.from.col - lastMove.to.col) * size;
-    const dy = (lastMove.from.row - lastMove.to.row) * size;
+    // If orientation is black, the visual axis is inverted
+    const orientationFactor = orientation === "BLACK" ? -1 : 1;
+    
+    const dx = (lastMove.from.col - lastMove.to.col) * size * orientationFactor;
+    const dy = (lastMove.from.row - lastMove.to.row) * size * orientationFactor;
 
     animation = { fromX: dx, fromY: dy };
   }
@@ -68,11 +69,7 @@ export default function Square({
     <div
       onDragOver={(e) => {
             e.preventDefault();
-            setHoveredSquare((prev: any) =>
-                prev?.row === row && prev?.col === col
-                ? prev
-                : { row, col }
-            );
+            setHoveredSquare({ row, col });
         }}
 
       onDrop={() => onDrop(row, col)}
@@ -113,9 +110,8 @@ export default function Square({
                 pointerEvents: "none",
             }}
             />
-        )}
-
-       
+          )}
+          
         {/* Legal move dot */}
         {legalMove && !legalMove.capture && (
         <div
@@ -160,7 +156,7 @@ export default function Square({
         )}
         
         {/* Rank (1–8) */}
-        {showRank && (
+        {isVisuallyFirstCol && (
         <div
             style={{
             position: "absolute",
@@ -178,7 +174,7 @@ export default function Square({
         )}
 
         {/* File (a–h) */}
-        {showFile && (
+        {isVisuallyLastRow && (
         <div
             style={{
             position: "absolute",

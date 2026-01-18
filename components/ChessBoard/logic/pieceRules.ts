@@ -55,8 +55,8 @@ export function pawnMoves(
   if (!piece) return [];
 
   const color = getColor(piece);
-  const dir = color === "w" ? -1 : 1;
-  const startRow = color === "w" ? 6 : 1;
+  const dir = color === "WHITE" ? -1 : 1;
+  const startRow = color === "WHITE" ? 6 : 1;
 
   const moves: PseudoMove[] = [];
 

@@ -11,14 +11,20 @@ export interface ChessEngine {
   makeMove(from: Square, to: Square): boolean;
 
   /** Whose turn is it */
-  getTurn(): "w" | "b";
+  getTurn(): "WHITE" | "BLACK";
 
-  isCheckmate( color: "w"|"b"):boolean;
+  isCheckmate( color: "WHITE"|"BLACK"):boolean;
 
   promotePawn(at:Square, piece:string): void;
   
   getBoard(): (string | null)[][];
 
   getHistory():string[];
+
+  getFen():string;
+
+  loadFen(Fen:string):void;
+
+  setTurn(t:"WHITE"|"BLACK"):void;
 
 }

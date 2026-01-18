@@ -1,4 +1,4 @@
-
+/* 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -153,5 +153,167 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+} */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 6%;
+    --foreground: 0 0% 95%;
+
+    --card: 0 0% 9%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 15 95% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 75%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 55%;
+
+    --accent: 15 60% 12%;
+    --accent-foreground: 15 95% 65%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 15 95% 55%;
+
+    --radius: 0.75rem;
+
+    /* Gamer chess tokens */
+    --chess-dark: 0 0% 4%;
+    --chess-light: 0 0% 18%;
+    --chess-accent: 15 95% 55%;
+    --chess-accent-glow: 25 100% 60%;
+    --chess-gold: 43 100% 50%;
+    --chess-silver: 0 0% 70%;
+    --chess-bronze: 25 70% 45%;
+    --chess-win: 120 60% 45%;
+    --chess-loss: 0 70% 50%;
+    --chess-fire: 10 90% 50%;
+    --chess-ember: 25 95% 55%;
+
+    /* Neon glow shadows */
+    --shadow-soft: 0 4px 20px -4px hsl(0 0% 0% / 0.6);
+    --shadow-hover: 0 8px 30px -6px hsl(0 0% 0% / 0.7);
+    --shadow-glow: 0 0 50px -12px hsl(15 95% 55% / 0.5), 0 0 20px -5px hsl(25 100% 60% / 0.3);
+    --shadow-inset: inset 0 2px 4px 0 hsl(0 0% 0% / 0.4);
+    --shadow-neon: 0 0 30px -5px hsl(15 95% 55% / 0.6);
+
+    --sidebar-background: 0 0% 8%;
+    --sidebar-foreground: 0 0% 85%;
+    --sidebar-primary: 15 95% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 12%;
+    --sidebar-accent-foreground: 0 0% 85%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 15 95% 55%;
+  }
+
+  .dark {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 95%;
+
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 15 95% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 75%;
+
+    --muted: 0 0% 13%;
+    --muted-foreground: 0 0% 55%;
+
+    --accent: 15 60% 10%;
+    --accent-foreground: 15 95% 65%;
+
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 13%;
+    --input: 0 0% 13%;
+    --ring: 15 95% 55%;
+
+    --sidebar-background: 0 0% 6%;
+    --sidebar-foreground: 0 0% 85%;
+    --sidebar-primary: 15 95% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 85%;
+    --sidebar-border: 0 0% 13%;
+    --sidebar-ring: 15 95% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+}
+
+@layer utilities {
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-hover {
+    box-shadow: var(--shadow-hover);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .shadow-inset {
+    box-shadow: var(--shadow-inset);
+  }
+
+  .shadow-neon {
+    box-shadow: var(--shadow-neon);
+  }
+
+  .glass {
+    @apply bg-card/80 backdrop-blur-xl;
+  }
+
+  .gamer-gradient {
+    background: linear-gradient(135deg, hsl(15 95% 55%) 0%, hsl(25 100% 60%) 50%, hsl(35 100% 55%) 100%);
+  }
+
+  .text-glow {
+    text-shadow: 0 0 20px hsl(15 95% 55% / 0.5);
+  }
+
+  .border-glow {
+    border: 1px solid hsl(15 95% 55% / 0.3);
+    box-shadow: inset 0 0 20px hsl(15 95% 55% / 0.05);
   }
 }

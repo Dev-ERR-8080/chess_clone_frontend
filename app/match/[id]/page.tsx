@@ -12,13 +12,17 @@ export default function Play(){
         if(!match){
             fetch(`http://localhost:8080/matches/${matchId}`,{credentials:"include"})
             .then(r=>r.json())
-            .then(data=>setMatch(data));
+            .then(data=>{
+                // console.log("data from the api:"+data.matchId+data.color+data.mode);
+                setMatch(data)
+        });
         }
     },[]);
+    console.log("match at match.tsx layer"+match?.matchId+match?.color+match?.mode);
 
     return(
         <div>
-            <ChessBoard matchId={match?.matchId} color= {match?.color} matchType = {match?.matchType}/>
+            <ChessBoard matchId={match?.matchId} color= {match?.color} matchType = {match?.mode}/>
             {/* <ChessBoard /> */}
         </div>
     )

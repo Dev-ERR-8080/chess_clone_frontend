@@ -8,7 +8,7 @@ export function isInsideBoard(row: number, col: number) {
 }
 
 export function getColor(piece: string) {
-  return piece[0] as "w" | "b";
+  return piece[0] ==="w" ? "WHITE" : "BLACK";
 }
 
 export function getType(piece: string) {

@@ -3,17 +3,19 @@ import { getPseudoLegalMoves } from "./moveGenerator";
 
 function isKingInCheck(
   board: (string | null)[][],
-  color: "w" | "b"
+  color: "WHITE" | "BLACK"
 ): boolean {
   const kingPos = findKing(board, color);
   if (!kingPos) return false;
 
-  const enemy = color === "w" ? "b" : "w";
+  const enemy = color === "WHITE" ? "BLACK" : "WHITE";
 
   for (let r = 0; r < 8; r++) {
     for (let c = 0; c < 8; c++) {
       const piece = board[r][c];
-      if (!piece || piece[0] !== enemy) continue;
+      if (!piece) continue;
+      const pieceColor = piece[0] === "w" ? "WHITE" : "BLACK";
+      if (pieceColor !== enemy) continue;
 
       const moves = getPseudoLegalMoves(board, r, c);
       if (
@@ -32,12 +34,14 @@ function isSquareAttacked(
   board:(string|null)[][],
   row:number,
   col:number,
-  byColor:"w"|"b") {
+  byColor:"WHITE"|"BLACK") {
   console.log("The Squre is under check you cant move")
   for (let r = 0; r < 8; r++) {
     for (let c = 0; c < 8; c++) {
       const p = board[r][c];
-      if (!p || p[0] !== byColor) continue;
+      if (!p) continue;
+      const pieceColor = p[0] === "w" ? "WHITE" : "BLACK";
+      if (pieceColor !== byColor) continue;
 
       const moves = getPseudoLegalMoves(board, r, c);
       if (moves.some(m => m.row === row && m.col === col)) {
