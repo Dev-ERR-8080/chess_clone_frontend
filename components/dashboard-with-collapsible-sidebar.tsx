@@ -6,7 +6,7 @@ import {
   Bell, Settings, HelpCircle, User, LucideIcon, Medal,
   PlayCircle, Flame, Zap, Clock
 } from "lucide-react";
-import ChessGame from "@/app/match[matchId]/page";
+
 
 // --- Types ---
 interface OptionProps {

@@ -5,10 +5,10 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
+import { Skeleton } from "./ui/skeleton";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 
-import { Button } from "./button";
-import { Input } from "./input";
-import { Skeleton } from "./skeleton";
 
 interface ImageUploadFieldProps {
   value?: File | string | null;
@@ -74,8 +74,8 @@ export function ImageUploadField({
         className={cn(
           "rounded-lg border-2 border-dashed border-muted",
           className,
+          `aspect-[${aspectRatio}]`
         )}
-        style={{ aspectRatio }}
       />
     );
   }

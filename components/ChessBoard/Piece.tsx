@@ -17,8 +17,20 @@ export default function Piece({
   };
 }) {
   const src = `https://assets-themes.chess.com/image/ejgfv/150/${piece.toLowerCase()}.png`;
-
+  const isWhite = piece.startsWith('w');
   return (
+    <div style={{ position: 'relative' }}>
+      {/* Subtle "Glow" under the piece */}
+      <div style={{
+        position: 'absolute',
+        bottom: -5,
+        left: '10%',
+        width: '80%',
+        height: '20%',
+        background: 'rgba(0,0,0,0.4)',
+        filter: 'blur(8px)',
+        borderRadius: '50%'
+      }} />
     <motion.img
       draggable
       onDragStart={onDragStart}
@@ -40,5 +52,6 @@ export default function Piece({
       }}
       onMouseDown={() => onDragStart()}
     />
+    </div>
   );
 }

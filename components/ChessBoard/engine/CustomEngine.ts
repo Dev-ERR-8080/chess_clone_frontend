@@ -256,8 +256,84 @@ export class CustomEngine implements ChessEngine {
     return san;
   }
 
-  loadFen(Fen: string): void {
+  // loadFen(Fen: string): void {
       
+  // }
+
+  loadFen(fen: string): void {
+    const parts = fen.trim().split(" ");
+    if (parts.length < 6) {
+      throw new Error("Invalid FEN");
+    }
+
+    const [
+      boardPart,
+      turnPart,
+      castlingPart,
+      enPassantPart,
+      halfMovePart,
+      fullMovePart
+    ] = parts;
+
+    // -------------------------
+    // 1️⃣ BOARD
+    // -------------------------
+    const rows = boardPart.split("/");
+    if (rows.length !== 8) {
+      throw new Error("Invalid FEN board");
+    }
+
+    const newBoard: (string | null)[][] = [];
+
+    for (let r = 0; r < 8; r++) {
+      const row: (string | null)[] = [];
+      for (const ch of rows[r]) {
+        if (/\d/.test(ch)) {
+          const empty = parseInt(ch, 10);
+          for (let i = 0; i < empty; i++) row.push(null);
+        } else {
+          const color = ch === ch.toUpperCase() ? "w" : "b";
+          const piece = ch.toUpperCase();
+          row.push(color + piece);
+        }
+      }
+      if (row.length !== 8) {
+        throw new Error("Invalid FEN row length");
+      }
+      newBoard.push(row);
+    }
+
+    this.board = newBoard;
+
+    // -------------------------
+    // 2️⃣ TURN
+    // -------------------------
+    this.turn = turnPart === "w" ? "WHITE" : "BLACK";
+
+    // -------------------------
+    // 3️⃣ CASTLING RIGHTS
+    // -------------------------
+    this.castling = {
+      wK: castlingPart.includes("K"),
+      wQ: castlingPart.includes("Q"),
+      bK: castlingPart.includes("k"),
+      bQ: castlingPart.includes("q"),
+    };
+
+    // -------------------------
+    // 4️⃣ EN PASSANT
+    // -------------------------
+    this.enPassantSquare = enPassantPart === "-" ? null : enPassantPart;
+
+    // -------------------------
+    // 5️⃣ HALF MOVE CLOCK
+    // -------------------------
+    this.halfMoveClock = parseInt(halfMovePart, 10) || 0;
+
+    // -------------------------
+    // 6️⃣ FULL MOVE NUMBER
+    // -------------------------
+    this.fullMoveNumber = parseInt(fullMovePart, 10) || 1;
   }
 
   setTurn(t: "WHITE" | "BLACK"): void {

@@ -1,5 +1,5 @@
 interface PromotionModalProps {
-  color: "WHITE" | "BLACK";
+  color: "w" | "b";
   onSelect: (piece: string) => void;
 }
 

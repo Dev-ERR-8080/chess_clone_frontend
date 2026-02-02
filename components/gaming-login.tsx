@@ -161,7 +161,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
     };
 
     function handleChromeLogin(): void {
-        window.location.href ="http://localhost:8080/oauth2/authorization/google";
+        window.location.href ="http://localhost:8081/oauth2/authorization/google";
     }
 
     function handleTwitterLogin(): void {
@@ -296,9 +296,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
                     disabled={isSubmitting}
                     className={`w-full py-3 rounded-lg ${isSuccess
                         ? 'animate-success'
-                        : 'bg-purple-600 hover:bg-purple-700'} text-white font-medium transition-all duration-200 ease-in-out transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40`}
+                        : 'bg-[#4E312D] hover:bg-purple-700'} text-white font-medium transition-all duration-200 ease-in-out transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-[#4E312D] focus:ring-opacity-50 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none shadow-lg shadow-[#4E312D]/20 hover:shadow-purple-500/40`}
                 >
-                    {isSubmitting ? 'Logging in...' : 'Enter NexusGate'}
+                    {isSubmitting ? 'Logging in...' : 'Enter Grand Masters'}
                 </button>
             </form>
 

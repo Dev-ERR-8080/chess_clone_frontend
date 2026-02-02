@@ -1,6 +1,6 @@
 
 'use client';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button-lovable";
 import {
@@ -22,12 +22,11 @@ import {
   ChevronDown
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import SockJS from "sockjs-client";
-import { Client } from "@stomp/stompjs";
-import { useMatch } from "@/lib/MatchContext";
+import { useMatch } from "@/context/MatchContext";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ok } from "assert";
-import { cookies } from "next/headers";
+import { useSocket } from "@/context/SocketContext";
+import { useUser } from "@/context/UserContext";
+
 
 
 interface User {
@@ -49,12 +48,14 @@ const Index = () => {
   const [matchId, setMatchId] = useState<string | null>(null);
   const [color, setColor] = useState<string | null>(null);
   const [selectedMode, setSelectedMode] = useState<MatchMode>("CLASSIC");
-  const [user, setUser] = useState<User | null>(null);
   const [error, setError] = useState<string>("");
   const [isLoggedIn,setIsLoggedIn] = useState<boolean>(false);
-
   const {setMatch} = useMatch();
+  const isRedirected = useRef(false);
+  const {stompClient, isConnected} = useSocket();
   const router = useRouter();
+
+  const {user} = useUser();
 
   const startTimer = (seconds: number) => {
     setTimer(seconds);
@@ -74,62 +75,35 @@ const Index = () => {
  useEffect(() => {
     const init = async () => {
       try {
-        const response = await fetch("http://localhost:8080/user/me", {
-          credentials: "include",
-        });
+        if(user && user.userId) setIsLoggedIn(true);
 
-        if (!response.ok) {
-          setIsLoggedIn(false)
-          throw new Error("Unauthorized");
-        }
 
-        const userData = await response.json();
-        setUser(userData);
-        setIsLoggedIn(true)
+        if(isConnected && stompClient){
+            const sub = stompClient.subscribe(`/user/queue/match-found`, (msg) => {
+              if(isRedirected.current) return;
 
-        const socket = new SockJS("http://localhost:8080/ws");
-        const client = new Client({
-          webSocketFactory: () => socket,
-          reconnectDelay: 5000,
-        });
-
-        client.onConnect = () => {
-          console.log("WS connected");
-
-          client.subscribe(`/topic/match/${userData.userId}`, (msg) => {
-            const resData = JSON.parse(msg.body);
-            console.log("MATCH FOUND:", resData);
-            setMatch(resData);
-            router.push(`/match/${resData.matchId}`);
-            // showBoard(resData.matchId,data.color);  
+              const resData = JSON.parse(msg.body);
+              console.log("MATCH FOUND:", resData);
+              const assignedColor = resData.player1Id === user?.userId ? "WHITE" : "BLACK";
+              setMatch({
+                ...resData,
+                color: assignedColor
+              });
+            setTimeout(() => {
+              isRedirected.current = true;
+              router.push(`/match/${resData.matchId}`);
+            }, 0);
           });
+          return () => sub.unsubscribe();
         };
-
-        client.activate();
+        // client.activate();
       } catch (err) {
         console.error("Init error", err);
       }
     };
 
     init();
-  }, []);
-
-  const checkLogin = async () => {
-    try {
-      const res = await fetch("http://localhost:8080/user/me", {
-        method: "GET",
-        credentials: "include",
-        headers: { "Accept": "application/json" }
-      });
-      const data = await res.json();
-      console.log("User Data:", data);
-      return data;
-    } catch (err) {
-      console.error("Failed to check login", err);
-    }
-  };
-
-
+  }, [isConnected, stompClient]);
 
   const startGame = async () => {
     setIsSearching(true);
@@ -189,6 +163,17 @@ const Index = () => {
     
   };
 
+  const handleCancelSearch = async (): Promise<any> => {
+    const res = await fetch("http://localhost:8080/matchmaking/cancel", { 
+      method: "POST",
+      credentials:"include",
+      headers: { "Content-Type": "application/json" },
+    });
+    if(res.status === 200){
+        setIsSearching(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -215,22 +200,29 @@ const Index = () => {
           { isLoggedIn &&<div className="flex items-center gap-4">
             <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary border-glow">
               <Trophy className="w-4 h-4 text-chess-gold" />
-              <span className="font-bold text-sm">1847</span>
+              <span className="font-bold text-sm">{user?.currentRating}</span>
             </div>
               <DropdownMenu>
                 {/* 1. The button that opens the menu */}
                 <DropdownMenuTrigger className="flex gap-2">
+                  <div className="flex items-center gap-2 cursor-pointer group">
                   <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
                       <img
                         className="rounded-full"
-                        src={user?.pfpUrl}
+                        src={user?.pfpUrl || "https://cdn-icons-png.flaticon.com/512/1326/1326377.png"} 
                         alt="Profile image"
                         width={40}
                         height={40}
                         aria-hidden="true"
                       />
                   </Button>
+                  <Avatar>
+                    {user?.pfpUrl == null && 
+                      <AvatarFallback content={user?.name} />
+                    }
+                  </Avatar>
                   <ChevronDown size={16} strokeWidth={2} className="ms-2 opacity-60" aria-hidden="true" />
+                  </div>
                 </DropdownMenuTrigger>
 
                 {/* 2. The floating container */}
@@ -319,7 +311,7 @@ const Index = () => {
                   </>
                 )}
               </Button>
-
+              {isSearching && <Button className="ml-2" onClick={handleCancelSearch}>Cancel Matchmaking</Button>}
               {/* Quick Actions */}
               <div className="flex items-center justify-center gap-6 mt-6 pt-6 border-t border-border/50">
                 <button className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">

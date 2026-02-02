@@ -12,7 +12,7 @@ const WebSocketTest: React.FC = () => {
 
     useEffect(() => {
         // 1. Initialize SockJS and Stomp Client
-        const socket = new SockJS('http://localhost:8080/ws'); // Adjust to your backend URL
+        const socket = new SockJS('http://localhost:8080/game/ws'); // Adjust to your backend URL
         const client = new Client({
             webSocketFactory: () => socket,
             reconnectDelay: 5000,

@@ -34,7 +34,7 @@ export default function Login() {
     setErrorMessage(null);
 
     try {
-      console.log("Submitting form with:", { email, password, remember, isRegister, username, confirmPassword , fullName,country});
+      // console.log("Submitting form with:", { email, password, remember, isRegister, username, confirmPassword , fullName,country});
       if(isRegister && (!username || !confirmPassword )) throw new Error("Username and Confirm Password are required for registration");
 
       if(isRegister && password !== confirmPassword) throw new Error("Passwords do not match");

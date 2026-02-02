@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { MatchProvider } from "@/lib/MatchContext";
-
-
+import { MatchProvider } from "@/context/MatchContext";
+import { UserProvider } from "@/context/UserContext";
+import SocketWrapper from "@/components/SocketWrapper";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,10 +19,15 @@ export default function RootLayout({
       <body
        suppressHydrationWarning={true} className="bg-background text-foreground antialiased"
       >
-        <MatchProvider >
-          {children}
-        </MatchProvider>
+        <UserProvider>
+          <SocketWrapper>
+            <MatchProvider>
+              {children}
+            </MatchProvider>
+          </SocketWrapper>
+        </UserProvider>
       </body>
     </html>
   );
 }
+
